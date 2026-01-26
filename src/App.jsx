@@ -11,7 +11,7 @@ const TEAM_DETAILS = {
     name: "Tânia Albuquerque",
     role: "Sócia Proprietária",
     crea: "CREA-MG 95614/D",
-    img: "/foto-tania.jpg", // [SUBSTITUIR FOTO]
+    img: "/foto-tania.jpeg", // [SUBSTITUIR FOTO]
     bio: [
       "Engenheira Civil graduada pela UFMG (Ago/2007)",
       "Pós-Graduada em Estruturas (Jul/2012)",
@@ -24,7 +24,7 @@ const TEAM_DETAILS = {
     name: "Thaís Albuquerque",
     role: "Sócia Proprietária",
     crea: "CREA-MG 229528/D",
-    img: "/foto-thais.jpg", // [SUBSTITUIR FOTO]
+    img: "/foto-thais.jpeg", // [SUBSTITUIR FOTO]
     bio: [
       "Engenheira Civil graduada pela PUC-MG (Jul/2017)",
       "Pós-Graduada em Gestão de Projetos (Jul/2020)",
@@ -398,7 +398,7 @@ function App() {
             <div className="relative">
               {/* [FOTO SÓCIAS] */}
               <div className="bg-slate-200 aspect-[4/5] rounded-lg shadow-2xl relative overflow-hidden group">
-                <img src="/foto-socias.png" alt="Tânia e Thais Albuquerque" className="w-full h-full object-cover" />
+                <img src="/foto-socias.jpeg" alt="Tânia e Thais Albuquerque" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
                 <div className="absolute bottom-4 left-4 text-white">
                   <p className="font-bold text-lg">Tânia & Thais Albuquerque</p>
