@@ -615,8 +615,8 @@ function App() {
                 <img src="/depoimentos/depoimento-2.jpeg" alt="Feedback Inovações" className="w-full h-auto" />
               </div>
               <div className="text-center">
-                <p className="font-bold text-lg">Nome do Cliente</p>
-                <p className="text-blue-200 text-sm">Empresa Parceira</p>
+                <p className="font-bold text-lg">Rodrigo Paiz</p>
+                <p className="text-blue-200 text-sm">Engenheiro na Prati</p>
               </div>
             </div>
 
