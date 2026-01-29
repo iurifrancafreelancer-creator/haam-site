@@ -51,7 +51,7 @@ const SERVICES_DETAILS = {
       "Projeto da superestrutura em parede de concreto",
       "Cálculo e detalhamento das armações das paredes e lajes",
       "Projeto de fundação (cintas, blocos, lajão) com base no levantamento geotécnico",
-      "Tabela de quantitativos precisa e emissão de ART"
+      "Tabela de quantitativos precisa"
     ]
   },
   consultoria: {
@@ -60,15 +60,16 @@ const SERVICES_DETAILS = {
       "Estudo de viabilidade estrutural e comparativos de métodos construtivos",
       "Análise de propostas comerciais para aquisição ou locação de formas",
       "Apoio técnico para execução e cuidados com a forma (limpeza e manutenção)",
-      "Modelos de depreciação e gestão de ativo"
+      "Modelos de depreciação e gestão de ativo",
+      "Compatibilização entre os projetos de Arquitetura, Estrutura e Sistema de Formas"
     ]
   },
   escadas: {
     title: "Projetos de Escadas em 3D",
     content: [
-      "Detalhamento complexo de escadas para execução perfeita",
+      "Detalhamento completo de escadas para execução perfeita",
       "Otimização de peças e encaixes",
-      "Visualização tridimensional para facilitar o entendimento da equipe de obra"
+      "Visualização 3D"
     ]
   },
   compatibilizacao: {
@@ -99,8 +100,7 @@ const SERVICES_DETAILS = {
     title: "Projetos Estruturais - Alvenaria",
     content: [
       "Projetos completos para alvenaria estrutural",
-      "Detalhamento de fiadas e grauteamento",
-      "Otimização de blocos e redução de desperdício"
+      "Detalhamento de fiadas e vistas das paredes",
     ]
   }
 };
@@ -108,33 +108,51 @@ const SERVICES_DETAILS = {
 const PORTFOLIO_DETAILS = {
   'modulacao': {
     title: "Modulação de Parede",
-    img: "/portfolio/modulacao-parede.jpg",
-    desc: "Detalhamento para 1ª concretagem com precisão milimétrica e otimização de formas."
+    // Agora aceita várias imagens
+    images: [
+      "/portfolio/modulacao-parede.jpg",
+      "/portfolio/modulacao-parede-2.jpg",
+      "/portfolio/modulacao-parede-3.jpg",
+      "/portfolio/modulacao-parede-4.jpg",
+      "/portfolio/modulacao-parede-5.jpg",
+      "/portfolio/modulacao-parede-6.jpg",
+      "/portfolio/modulacao-parede-7.jpg" 
+    ],
+    desc: "Detalhamento da 1° concretagem com indicação de peças novas e peças utilizadas."
   },
   'escada': {
-    title: "Escadas e Acessórios",
-    img: "/portfolio/escada-3d.jpg",
-    desc: "Projeto de tensores e otimização de peças para escadas complexas, garantindo execução perfeita."
+    title: "Escada 3D",
+    images: [
+      "/portfolio/escada-3d.jpg",
+      "/portfolio/escada-3d-2.jpg", 
+      "/portfolio/escada-3d-3.jpg"  
+    ],
+    desc: "Projeto modulado da escada, podendo ser nova ou adaptada. Visualização completa dos encaixes."
   },
   'seguranca': {
     title: "Sistema de Segurança",
-    img: "/portfolio/seguranca.jpg",
-    desc: "Projetos de linha de vida e guarda-corpo com emissão de ART e total conformidade com normas."
+    images: [
+      "/portfolio/seguranca.jpg",
+      "/portfolio/seguranca-2.jpg",
+      "/portfolio/seguranca-3.jpg",
+      "/portfolio/seguranca-4.jpg" 
+    ],
+    desc: "Projetos de sistema de segurança monoportátil e GANG com indicação de peças por módulo."
   },
   'estrutural': {
     title: "Estrutural Parede Concreto",
-    img: "/portfolio/estrutural.jpg",
+    images: ["/portfolio/estrutural.jpg"], // Mesmo se for só uma, mantenha dentro de []
     desc: "Cálculo de superestrutura e fundação otimizada para o sistema de parede de concreto."
   },
   'consultoria': {
-    title: "Consultoria de Campo",
-    img: "/portfolio/consultoria-tunel.jpg",
-    desc: "Validação técnica in loco (Túnel de forma), ajustes de processos e otimização de estoque."
+    title: "Consultoria",
+    images: ["/portfolio/consultoria-tunel.jpg"],
+    desc: "Estudo de viabilidade, análise de projetos e validação da pré-montagem."
   },
   'pecaaluminio': {
     title: "Lista de Peças de alumínio",
-    img: "/portfolio/peca-aluminio.jpg",
-    desc: "Planilha com levantamento de itens e orçamentos para modulãção de forma com otimização de estoque."
+    images: ["/portfolio/peca-aluminio.jpg"],
+    desc: "Lista de peças com indicação de peças novas e utilizadas."
   },
 };
 
@@ -206,7 +224,7 @@ function App() {
   const [activeModal, setActiveModal] = useState(null); // 'tania', 'thais', or serviceKey
   const [modalType, setModalType] = useState(null); // 'bio' or 'service'
 
-  const whatsappLink = "https://wa.me/5531998153205"; 
+  const whatsappLink = "https://wa.link/eyghet"; 
 
   // Controle do Sticky CTA
   useEffect(() => {
@@ -256,7 +274,6 @@ function App() {
             <a href="#sobre" className="hover:text-haam-blue transition">Sobre Nós</a>
             <a href="#servicos" className="hover:text-haam-blue transition">Serviços</a>
             <a href="#projetos" className="hover:text-haam-blue transition">Projetos</a>
-            <a href="#clientes" className="hover:text-haam-blue transition">Clientes</a>
             <a href="#faq" className="hover:text-haam-blue transition">Dúvidas</a>
           </nav>
 
@@ -278,7 +295,6 @@ function App() {
             <a href="#sobre" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Sobre Nós</a>
             <a href="#servicos" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Serviços</a>
             <a href="#projetos" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Projetos</a>
-            <a href="#clientes" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Clientes</a>
             <a href={whatsappLink} className="bg-green-600 text-white p-3 rounded text-center font-bold">Agendar no WhatsApp</a>
           </div>
         )}
@@ -308,7 +324,7 @@ function App() {
           <div className="relative bg-white/5 border border-white/10 p-2 rounded-xl backdrop-blur-sm animate-slide-in-right">
              {/* [IMAGEM HERO] */}
             <div className="bg-slate-800 aspect-video rounded-lg overflow-hidden border border-slate-700">
-               <img src="/hero-image-3d..webp" alt="Projeto 3D Parede de Concreto" className="w-full h-full object-cover opacity-80" />
+               <img src="/foto-capa2.jpeg" alt="Projeto 3D Parede de Concreto" className="w-full h-full object-cover opacity-80" />
             </div>
              <div className="absolute -bottom-6 -left-6 bg-white text-slate-900 p-4 rounded-lg shadow-xl border-l-4 border-haam-blue">
                <p className="text-sm font-bold flex items-center gap-2"><Award size={16} className="text-yellow-500"/> Certificação BNO 2025</p>
@@ -355,9 +371,9 @@ function App() {
             {/* --- LISTA DE LOGOS (ORIGINAL) --- */}
             <div className="flex items-center gap-12 md:gap-24 px-6 md:px-12">
               {[
-                "Tenda", "Direcional", "MRV", "Emccamp", "HM", 
+                "cobra", "Direcional", "prati", "Emccamp", "HM", 
                 "Realiza", "RDR", "G3", "Emcorp", "LBX", 
-                "Village", "Essence", "MC3", "CAC"
+                "Village", "Essence", "MC3", "CAC","rotas","LMarquezzo"
               ].map((cliente, index) => (
                 <div key={index} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
                   {/* Substitua os SRCS pelos arquivos reais ex: /clientes/tenda.png */}
@@ -373,9 +389,9 @@ function App() {
             {/* --- LISTA DE LOGOS (DUPLICADA PARA O LOOP) --- */}
             <div className="flex items-center gap-12 md:gap-24 px-6 md:px-12">
               {[
-                "Tenda", "Direcional", "MRV", "Emccamp", "HM", 
+                "cobra", "Direcional", "prati", "Emccamp", "HM", 
                 "Realiza", "RDR", "G3", "Emcorp", "LBX", 
-                "Village", "Essence", "MC3", "CAC"
+                "Village", "Essence", "MC3", "CAC","rotas","LMarquezzo"
               ].map((cliente, index) => (
                 <div key={`dup-${index}`} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
                   <img 
@@ -398,7 +414,7 @@ function App() {
             <div className="relative">
               {/* [FOTO SÓCIAS] */}
               <div className="bg-slate-200 aspect-[4/5] rounded-lg shadow-2xl relative overflow-hidden group">
-                <img src="/foto-socias.jpeg" alt="Tânia e Thais Albuquerque" className="w-full h-full object-cover" />
+                <img src="/foto-socias2.png" alt="Tânia e Thais Albuquerque" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
                 <div className="absolute bottom-4 left-4 text-white">
                   <p className="font-bold text-lg">Tânia & Thais Albuquerque</p>
@@ -411,7 +427,7 @@ function App() {
               <span className="text-haam-red font-bold uppercase tracking-wider text-sm">Nossa História</span>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 mb-6">União de expertises: Escritório + Obra</h2>
               <p className="text-slate-600 mb-6 leading-relaxed">
-                A HAAM nasceu em Setembro de 2023 para suprir a carência do mercado em modulação de formas assertiva. Fundada por <strong>Tânia Albuquerque</strong> e reforçada por <strong>Thais Albuquerque</strong>, integramos o conhecimento estrutural profundo com a visão prática de execução e canteiro.
+                A HAAM nasceu em Setembro de 2023 para suprir a carência do mercado em modulação de formas assertiva. Fundada por <strong>Tânia Albuquerque</strong> e reforçada por <strong>Thais Albuquerque</strong>, integrando o conhecimento estrutural profundo com a visão prática de execução e canteiro.
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -492,13 +508,11 @@ function App() {
           <div className="flex overflow-x-auto md:grid md:grid-cols-4 gap-6 pb-8 snap-x snap-mandatory scroll-smooth p-2">
             {[
               { id: 'modulacao', title: "Modulação de Formas", icon: <Ruler /> },
-              { id: 'estrutural', title: "Projetos Estruturais (Concreto)", icon: <Building2 /> },
+              { id: 'estrutural', title: "Projetos Estruturais (Parede de Concreto)", icon: <Building2 /> },
               { id: 'consultoria', title: "Consultoria Técnica", icon: <HardHat /> },
-              { id: 'compatibilizacao', title: "Compatibilização", icon: <FileCheck /> },
               { id: 'escadas', title: "Escadas em 3D", icon: <BrainCircuit /> },
-              { id: 'viabilidade', title: "Estudos de Viabilidade", icon: <CheckCircle2 /> },
               { id: 'treinamento', title: "Treinamentos", icon: <Users /> },
-              { id: 'alvenaria', title: "Projetos Alvenaria", icon: <Building2 /> },
+              { id: 'alvenaria', title: "Projetos Estruturais (Alvenaria Estrutural)", icon: <Building2 /> },
             ].map((servico) => (
               <button 
                 key={servico.id} 
@@ -534,10 +548,10 @@ function App() {
               >
                  <div className="h-56 bg-slate-200 overflow-hidden relative">
                    <img 
-                     src={item.img} 
-                     alt={item.title} 
-                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
-                   />
+                        src={item.images[0]} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+                      />
                    {/* Ícone de Zoom no Hover */}
                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <span className="bg-white/90 text-slate-900 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">Ver Ampliado</span>
@@ -562,27 +576,74 @@ function App() {
             {/* [IMAGENS LOGOS PARCEIROS] - Substitua pelos arquivos reais */}
             <img src="/logos/rml.png" alt="RML" className="h-12 object-contain" />
             <img src="/logos/enpm.png" alt="ENPM" className="h-10 object-contain" />
-            <img src="/logos/duo.png" alt="Duo" className="h-10 object-contain" />
-            <img src="/logos/sf-formas.png" alt="SF Formas" className="h-12 object-contain" />
+            <img src="/logos/jri.png" alt="JRI" className="h-16 object-contain" />
+            <img src="/logos/bimeng.png" alt="Bimeng" className="h-10 object-contain" />
+            <img src="/logos/sf-formas.png" alt="SF Formas" className="h-14 object-contain" />
             <img src="/logos/septem.png" alt="Septem" className="h-10 object-contain" />
             <img src="/logos/soldas-fusion.png" alt="Soldas Fusion" className="h-10 object-contain" />
           </div>
         </div>
       </section>
 
-      {/* --- DEPOIMENTOS (Novo) --- */}
+      {/* --- DEPOIMENTOS (Atualizado) --- */}
       <section className="py-20 bg-haam-blue text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <Quote size={48} className="text-blue-300 mx-auto mb-6 opacity-50" />
-          <h2 className="text-2xl md:text-3xl font-bold mb-8">"O atendimento é o que recebemos maior elogio no dia a dia. Cumprimento de cronograma, organização e técnica."</h2>
-          <div className="flex items-center justify-center gap-2">
-            <Star className="text-yellow-400 fill-current" size={20} />
-            <Star className="text-yellow-400 fill-current" size={20} />
-            <Star className="text-yellow-400 fill-current" size={20} />
-            <Star className="text-yellow-400 fill-current" size={20} />
-            <Star className="text-yellow-400 fill-current" size={20} />
+        <div className="max-w-6xl mx-auto px-4">
+          
+          {/* Destaque Principal - Thais */}
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <Quote size={48} className="text-blue-300 mx-auto mb-6 opacity-50" />
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-relaxed">
+              "O atendimento é o que recebemos maior elogio no dia a dia. Cumprimento de cronograma, organização e técnica."
+            </h2>
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="text-yellow-400 fill-current" size={20} />
+                ))}
+              </div>
+              <p className="font-bold text-lg text-white">Thais Albuquerque</p>
+              <p className="text-blue-200 text-sm uppercase tracking-wider">Sócia da HAAM Engenharia</p>
+            </div>
           </div>
-          <p className="mt-4 text-blue-200">Feedback consolidado de clientes parceiros</p>
+
+          {/* Grid de Prints do WhatsApp */}
+          <div className="grid md:grid-cols-3 gap-8 items-start">
+            
+            {/* Depoimento 1 */}
+            <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
+              <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
+                {/* Ajuste o caminho da imagem conforme você salvou na pasta public */}
+                <img src="/depoimentos/depoimento-1.jpeg" alt="Feedback Equipe Encantada" className="w-full h-auto" />
+              </div>
+              <div className="text-center">
+                <p className="font-bold text-lg">Nome do Cliente</p>
+                <p className="text-blue-200 text-sm">Empresa Parceira</p>
+              </div>
+            </div>
+
+            {/* Depoimento 2 */}
+            <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
+              <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
+                <img src="/depoimentos/depoimento-2.jpeg" alt="Feedback Inovações" className="w-full h-auto" />
+              </div>
+              <div className="text-center">
+                <p className="font-bold text-lg">Nome do Cliente</p>
+                <p className="text-blue-200 text-sm">Empresa Parceira</p>
+              </div>
+            </div>
+
+            {/* Depoimento 3 */}
+            <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
+              <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
+                <img src="/depoimentos/depoimento-3.jpeg" alt="Feedback Projeto Excelente" className="w-full h-auto" />
+              </div>
+              <div className="text-center">
+                <p className="font-bold text-lg">Larissa</p>
+                <p className="text-blue-200 text-sm">Emccamp</p>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -592,16 +653,16 @@ function App() {
           <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Dúvidas Frequentes</h2>
           <div className="bg-gray-50 rounded-2xl p-6 md:p-10 border border-gray-100">
             <FaqItem 
-              question="Onde a HAAM atende?" 
+              question="A Haam atende a todos os estados do Brasil?" 
               answer="Atendemos em todo o território nacional (Brasil), com sede em Minas Gerais. Realizamos consultorias presenciais e projetos de forma remota com total eficiência." 
             />
             <FaqItem 
               question="Quando devo contratar a HAAM?" 
-              answer="O ideal é na concepção do método construtivo ou quando você já usa parede de concreto e precisa adaptar formas para uma nova obra (sequenciamento de ativo)." 
+              answer="O ideal é na concepção do método construtivo ou quando você já usa parede de concreto." 
             />
             <FaqItem 
               question="Vocês atendem todos os tipos de forma?" 
-              answer="Sim! Temos expertise com os principais sistemas de formas (alumínio, aço) e fabricantes do mercado." 
+              answer="Sim! Temos expertise com os principais sistemas de formas (alumínio e aço)." 
             />
              <FaqItem 
               question="Quanto custa contratar a HAAM?" 
@@ -632,7 +693,8 @@ function App() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2"><Phone size={14} className="text-haam-blue"/> (31) 9 9815-3205 (Thais)</li>
               <li className="flex items-center gap-2"><Phone size={14} className="text-haam-blue"/> (31) 9 8718-8900 (Tânia)</li>
-              <li className="hover:text-haam-blue transition cursor-pointer">haam_geral@outlook.com</li>
+              <li className="hover:text-haam-blue transition cursor-pointer">thais@haamengenharia.com.br</li>
+              <li className="hover:text-haam-blue transition cursor-pointer">tania@haamengenharia.com.br</li>
             </ul>
           </div>
 
@@ -698,17 +760,26 @@ function App() {
           </div>
         )}
 
-        {/* CONTEÚDO PORTFOLIO (IMAGEM GRANDE) */}
+        {/* CONTEÚDO PORTFOLIO (GALERIA DE IMAGENS) */}
         {modalType === 'portfolio' && PORTFOLIO_DETAILS[activeModal] && (
-          <div className="flex flex-col gap-4">
-             <div className="rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
-                <img 
-                  src={PORTFOLIO_DETAILS[activeModal].img} 
-                  alt={PORTFOLIO_DETAILS[activeModal].title} 
-                  className="w-full h-auto max-h-[60vh] object-contain mx-auto"
-                />
+          <div className="flex flex-col gap-6">
+             {/* Descrição no topo */}
+             <p className="text-slate-600 text-sm italic border-l-4 border-haam-blue pl-4">
+                {PORTFOLIO_DETAILS[activeModal].desc}
+             </p>
+
+             {/* Loop para mostrar todas as imagens */}
+             <div className="space-y-6">
+               {PORTFOLIO_DETAILS[activeModal].images.map((imgSrc, index) => (
+                 <div key={index} className="rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
+                    <img 
+                      src={imgSrc} 
+                      alt={`${PORTFOLIO_DETAILS[activeModal].title} - Imagem ${index + 1}`} 
+                      className="w-full h-auto object-contain"
+                    />
+                 </div>
+               ))}
              </div>
-             <p className="text-slate-600 text-sm text-center">{PORTFOLIO_DETAILS[activeModal].desc}</p>
           </div>
         )}
       </Modal>
