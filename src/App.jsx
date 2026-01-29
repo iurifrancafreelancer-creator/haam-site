@@ -373,7 +373,7 @@ function App() {
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
                 "Realiza", "RDR", "G3", "Emcorp", "LBX", 
-                "Village", "Essence", "MC3", "CAC","rotas","LMarquezzo"
+                "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo",
               ].map((cliente, index) => (
                 <div key={index} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
                   {/* Substitua os SRCS pelos arquivos reais ex: /clientes/tenda.png */}
@@ -391,7 +391,7 @@ function App() {
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
                 "Realiza", "RDR", "G3", "Emcorp", "LBX", 
-                "Village", "Essence", "MC3", "CAC","rotas","LMarquezzo"
+                "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo",
               ].map((cliente, index) => (
                 <div key={`dup-${index}`} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
                   <img 
@@ -568,29 +568,12 @@ function App() {
         </div>
       </section>
 
-      {/* --- PARCEIROS (Novo) --- */}
-      <section className="py-12 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4">
-          <p className="text-center text-slate-400 font-bold uppercase tracking-widest text-xs mb-8">Empresas Parceiras</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-            {/* [IMAGENS LOGOS PARCEIROS] - Substitua pelos arquivos reais */}
-            <img src="/logos/rml.png" alt="RML" className="h-12 object-contain" />
-            <img src="/logos/enpm.png" alt="ENPM" className="h-10 object-contain" />
-            <img src="/logos/jri.png" alt="JRI" className="h-16 object-contain" />
-            <img src="/logos/bimeng.png" alt="Bimeng" className="h-10 object-contain" />
-            <img src="/logos/sf-formas.png" alt="SF Formas" className="h-14 object-contain" />
-            <img src="/logos/septem.png" alt="Septem" className="h-10 object-contain" />
-            <img src="/logos/soldas-fusion.png" alt="Soldas Fusion" className="h-10 object-contain" />
-          </div>
-        </div>
-      </section>
-
-      {/* --- DEPOIMENTOS (Atualizado) --- */}
-      <section className="py-20 bg-haam-blue text-white">
+      {/* --- DEPOIMENTOS (Rolagem Lateral no Mobile) --- */}
+      <section className="py-20 bg-haam-blue text-white overflow-hidden">
         <div className="max-w-6xl mx-auto px-4">
           
           {/* Destaque Principal - Thais */}
-          <div className="max-w-4xl mx-auto text-center mb-16">
+          <div className="max-w-4xl mx-auto text-center mb-10 md:mb-16">
             <Quote size={48} className="text-blue-300 mx-auto mb-6 opacity-50" />
             <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-relaxed">
               "O atendimento é o que recebemos maior elogio no dia a dia. Cumprimento de cronograma, organização e técnica."
@@ -606,23 +589,28 @@ function App() {
             </div>
           </div>
 
-          {/* Grid de Prints do WhatsApp */}
-          <div className="grid md:grid-cols-3 gap-8 items-start">
+          {/* Dica de Scroll (Apenas Mobile) */}
+          <div className="md:hidden text-center text-blue-300 text-xs mb-4 animate-pulse">
+            &larr; Deslize para ver mais depoimentos &rarr;
+          </div>
+
+          {/* Grid/Carrossel de Prints */}
+          {/* Mobile: Flex + Scroll | Desktop: Grid */}
+          <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 items-start pb-8 md:pb-0 snap-x snap-mandatory -mx-4 px-4 md:mx-0 md:px-0 scroll-smooth">
             
             {/* Depoimento 1 */}
-            <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
+            <div className="min-w-[85vw] md:min-w-0 snap-center bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
               <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
-                {/* Ajuste o caminho da imagem conforme você salvou na pasta public */}
                 <img src="/depoimentos/depoimento-1.jpeg" alt="Feedback Equipe Encantada" className="w-full h-auto" />
               </div>
               <div className="text-center">
-                <p className="font-bold text-lg">Nome do Cliente</p>
-                <p className="text-blue-200 text-sm">Empresa Parceira</p>
+                <p className="font-bold text-lg">Charles Leite</p>
+                <p className="text-blue-200 text-sm">Representante Comercial da RML Brasil</p>
               </div>
             </div>
 
             {/* Depoimento 2 */}
-            <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
+            <div className="min-w-[85vw] md:min-w-0 snap-center bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
               <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
                 <img src="/depoimentos/depoimento-2.jpeg" alt="Feedback Inovações" className="w-full h-auto" />
               </div>
@@ -633,13 +621,13 @@ function App() {
             </div>
 
             {/* Depoimento 3 */}
-            <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
+            <div className="min-w-[85vw] md:min-w-0 snap-center bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
               <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
                 <img src="/depoimentos/depoimento-3.jpeg" alt="Feedback Projeto Excelente" className="w-full h-auto" />
               </div>
               <div className="text-center">
-                <p className="font-bold text-lg">Larissa</p>
-                <p className="text-blue-200 text-sm">Emccamp</p>
+                <p className="font-bold text-lg">Larissa Dias Veloso</p>
+                <p className="text-blue-200 text-sm">Coordenadora de projetos da EMCCAMP</p>
               </div>
             </div>
 
