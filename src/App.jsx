@@ -408,7 +408,7 @@ function App() {
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
                 "Realiza", "RDR", "G3", "Emcorp", "LBX", "fbb", "pride",
-                "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo",
+                "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo23"
               ].map((cliente, index) => (
                 <div key={index} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
                   {/* Substitua os SRCS pelos arquivos reais ex: /clientes/tenda.png */}
@@ -426,7 +426,7 @@ function App() {
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
                 "Realiza", "RDR", "G3", "Emcorp", "LBX", "fbb", "pride",
-                "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo",
+                "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo23"
               ].map((cliente, index) => (
                 <div key={`dup-${index}`} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
                   <img 
