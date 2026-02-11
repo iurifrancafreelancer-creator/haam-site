@@ -51,7 +51,7 @@ const SERVICES_DETAILS = {
       "Projeto da superestrutura em parede de concreto",
       "Cálculo e detalhamento das armações das paredes e lajes",
       "Projeto de fundação (cintas, blocos, lajão) com base no levantamento geotécnico",
-      "Tabela de quantitativos precisa"
+      "Tabela de quantitativos"
     ]
   },
   consultoria: {
@@ -99,8 +99,10 @@ const SERVICES_DETAILS = {
   alvenaria: {
     title: "Projetos Estruturais - Alvenaria",
     content: [
-      "Projetos completos para alvenaria estrutural",
-      "Detalhamento de fiadas e vistas das paredes",
+      "Projeto da superestrutura em alvenaria estrutural",
+      "Cálculo e detalhamento das lajes, cintas/vigas e reforços",
+      "Projeto de fundação (cintas, blocos, lajão) com base no levantamento geotécnico",
+      "Detalhamento de fiadas e vistas das paredes"
     ]
   }
 };
@@ -127,7 +129,7 @@ const PORTFOLIO_DETAILS = {
       "/portfolio/escada-3d-2.jpg", 
       "/portfolio/escada-3d-3.jpg"  
     ],
-    desc: "Projeto modulado da escada, podendo ser nova ou adaptada. Visualização completa dos encaixes."
+    desc: "Projeto modulado da escada, podendo ser nova ou adaptada. Visualização completa dos encaixes. Não contempla o projeto mecânico para produção."
   },
   'seguranca': {
     title: "Sistema de Segurança",
@@ -140,14 +142,27 @@ const PORTFOLIO_DETAILS = {
     desc: "Projetos de sistema de segurança monoportátil e GANG com indicação de peças por módulo."
   },
   'estrutural': {
-    title: "Estrutural Parede Concreto",
-    images: ["/portfolio/estrutural.jpg"], // Mesmo se for só uma, mantenha dentro de []
-    desc: "Cálculo de superestrutura e fundação otimizada para o sistema de parede de concreto."
+    title: "Projeto Estrutural",
+    images: ["/portfolio/estrutural.jpg",
+      "/portfolio/estrutural-1.jpg",
+      "/portfolio/estrutural-2.jpg",
+      "/portfolio/estrutural-3.jpg",
+      "/portfolio/estrutural-4.jpg",
+      "/portfolio/estrutural-5.jpg",
+      "/portfolio/estrutural-6.jpg",
+      "/portfolio/estrutural-7.jpg",
+      "/portfolio/estrutural-8.jpg",
+      "/portfolio/estrutural-9.jpg"
+    ], 
+    desc: "Cálculo e detalhamento de estruturas em parede de concreto e alvenaria estrutural."
   },
   'consultoria': {
     title: "Consultoria",
-    images: ["/portfolio/consultoria-tunel.jpg"],
-    desc: "Estudo de viabilidade, análise de projetos e validação da pré-montagem."
+    images: [
+      "/portfolio/consultoria-2.jpg",
+      "/portfolio/consultoria-1.jpeg",
+      "/portfolio/consultoria-tunel.jpg"],
+    desc: "Estudo de viabilidade, análise de projetos, assessoria na aquisição da forma e contratações de serviços, acompanhamento e validação da pré-montagem."
   },
   'pecaaluminio': {
     title: "Lista de Peças de alumínio",
@@ -224,7 +239,7 @@ function App() {
   const [activeModal, setActiveModal] = useState(null); // 'tania', 'thais', or serviceKey
   const [modalType, setModalType] = useState(null); // 'bio' or 'service'
 
-  const whatsappLink = "https://wa.link/eyghet"; 
+  const whatsappLink = "https://wa.me/5531998153205?text=Oi%2C%20tenho%20interesse%20em%20saber%20mais%20sobre%20o%20trabalho%20da%20HAAM!"; 
 
   // Controle do Sticky CTA
   useEffect(() => {
@@ -265,7 +280,10 @@ function App() {
       <header className="bg-white shadow-md fixed w-full z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
           {/* Logo (Substituir SRC) */}
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div 
+            className="flex items-center gap-2 cursor-pointer" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
             <img src="/logo-haam-colorida.png" alt="Logo HAAM Engenharia" className="h-12 w-auto" /> 
           </div>
 
@@ -321,14 +339,31 @@ function App() {
             </div>
           </div>
           
-          <div className="relative bg-white/5 border border-white/10 p-2 rounded-xl backdrop-blur-sm animate-slide-in-right">
-             {/* [IMAGEM HERO] */}
-            <div className="bg-slate-800 aspect-video rounded-lg overflow-hidden border border-slate-700">
-               <img src="/foto-capa2.jpeg" alt="Projeto 3D Parede de Concreto" className="w-full h-full object-cover opacity-80" />
-            </div>
-             <div className="absolute -bottom-6 -left-6 bg-white text-slate-900 p-4 rounded-lg shadow-xl border-l-4 border-haam-blue">
-               <p className="text-sm font-bold flex items-center gap-2"><Award size={16} className="text-yellow-500"/> Certificação BNO 2025</p>
-               <p className="text-xs text-slate-600">Profissional Extraordinário - Prata</p>
+          {/* Aumentei a margem inferior no mobile (mb-24) para o badge não atropelar a próxima seção */}
+          <div className="relative p-2 rounded-xl animate-slide-in-right mb-24 md:mb-12">
+             
+             {/* CONTAINER DA IMAGEM */}
+             <div className="relative rounded-lg overflow-hidden border border-slate-700 shadow-2xl z-10">
+                <div className="bg-slate-800 aspect-video relative">
+                   <img src="/foto-capa2.jpeg" alt="Projeto 3D Parede de Concreto" className="w-full h-full object-cover opacity-90" />
+                   
+                   {/* LEGENDA INTERNA */}
+                   <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-10 pb-4 px-4 flex justify-end items-end">
+                      <p className="text-[10px] md:text-xs text-slate-200 text-right font-medium leading-tight max-w-[65%]">
+                        Edifício London Plaza | Pride Engenharia<br/>
+                        <span className="text-slate-400 font-normal">Projeto de modulação feito pela HAAM</span>
+                      </p>
+                   </div>
+                </div>
+             </div>
+
+             {/* BADGE (PENDURADO PARA FORA) */}
+             {/* Mobile: -bottom-16 (Desce bem mais) | Desktop: -bottom-8 (Mantém o que estava bom) */}
+             <div className="absolute -bottom-16 md:-bottom-8 left-4 md:-left-6 bg-white text-slate-900 p-4 rounded-lg shadow-2xl border-l-4 border-haam-blue z-20 max-w-[200px]">
+               <p className="text-xs md:text-sm font-bold flex items-center gap-2 mb-1">
+                 <Award size={16} className="text-yellow-500 shrink-0"/> Certificação BNO
+               </p>
+               <p className="text-[10px] md:text-xs text-slate-600 leading-tight">Profissional Extraordinário 2025 - Prata</p>
              </div>
           </div>
         </div>
@@ -372,7 +407,7 @@ function App() {
             <div className="flex items-center gap-12 md:gap-24 px-6 md:px-12">
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
-                "Realiza", "RDR", "G3", "Emcorp", "LBX", 
+                "Realiza", "RDR", "G3", "Emcorp", "LBX", "fbb", "pride",
                 "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo",
               ].map((cliente, index) => (
                 <div key={index} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
@@ -390,7 +425,7 @@ function App() {
             <div className="flex items-center gap-12 md:gap-24 px-6 md:px-12">
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
-                "Realiza", "RDR", "G3", "Emcorp", "LBX", 
+                "Realiza", "RDR", "G3", "Emcorp", "LBX", "fbb", "pride",
                 "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo",
               ].map((cliente, index) => (
                 <div key={`dup-${index}`} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
@@ -407,12 +442,13 @@ function App() {
         </div>
       </section>
 
-      {/* --- SOBRE NÓS --- */}
+      {/* --- SOBRE NÓS (Fundo Branco com Título Premium) --- */}
       <section id="sobre" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-16 items-center">
+            
+            {/* Coluna da Imagem */}
             <div className="relative">
-              {/* [FOTO SÓCIAS] */}
               <div className="bg-slate-200 aspect-[4/5] rounded-lg shadow-2xl relative overflow-hidden group">
                 <img src="/foto-socias2.png" alt="Tânia e Thais Albuquerque" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
@@ -423,9 +459,18 @@ function App() {
               </div>
             </div>
             
+            {/* Coluna do Texto */}
             <div>
               <span className="text-haam-red font-bold uppercase tracking-wider text-sm">Nossa História</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 mb-6">União de expertises: Escritório + Obra</h2>
+              
+              {/* TÍTULO COM DEGRADÊ AZUL (Estilo Premium) */}
+              <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mt-2 mb-6 leading-tight">
+                União de expertises: <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-haam-blue via-blue-600 to-cyan-500">
+                  Escritório + Obra
+                </span>
+              </h2>
+
               <p className="text-slate-600 mb-6 leading-relaxed">
                 A HAAM nasceu em Setembro de 2023 para suprir a carência do mercado em modulação de formas assertiva. Fundada por <strong>Tânia Albuquerque</strong> e reforçada por <strong>Thais Albuquerque</strong>, integrando o conhecimento estrutural profundo com a visão prática de execução e canteiro.
               </p>
@@ -452,23 +497,23 @@ function App() {
                 </button>
               </div>
 
-            <div className="space-y-4 mb-8">
-                <div className="flex gap-4 items-start p-4 bg-slate-50 rounded-lg border border-slate-100">
-                   <div className="bg-haam-blue/10 p-2 rounded text-haam-blue"><Users size={24} /></div>
-                   <div>
-                     <h4 className="font-bold text-slate-900">Presença no Mercado</h4>
-                     <p className="text-sm text-slate-600">Participação ativa na <strong>ConstruirAi</strong> (Balneário Camboriú), <strong>ConstruNordeste</strong> (Salvador) e presença na <strong>Concrete Show</strong>.</p>
-                   </div>
-                </div>
+              <div className="space-y-4 mb-8">
+                  <div className="flex gap-4 items-start p-4 bg-slate-50 rounded-lg border border-slate-100">
+                     <div className="bg-haam-blue/10 p-2 rounded text-haam-blue"><Users size={24} /></div>
+                     <div>
+                       <h4 className="font-bold text-slate-900">Presença no Mercado</h4>
+                       <p className="text-sm text-slate-600">Participação ativa na <strong>ConstruirAi</strong> (Balneário Camboriú), <strong>ConstruNordeste</strong> (Salvador) e presença na <strong>Concrete Show</strong>.</p>
+                     </div>
+                  </div>
               </div>
 
               {/* Destaque Certificação */}
               <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg flex items-start gap-3">
-                 <Award className="text-yellow-600 shrink-0 mt-1" />
-                 <div>
-                   <h5 className="font-bold text-yellow-800">Destaque BNO 2025</h5>
-                   <p className="text-sm text-yellow-700">Certificação Prata - Profissional Extraordinário</p>
-                 </div>
+                  <Award className="text-yellow-600 shrink-0 mt-1" />
+                  <div>
+                    <h5 className="font-bold text-yellow-800">Destaque BNO 2025</h5>
+                    <p className="text-sm text-yellow-700">Certificação Prata - Profissional Extraordinário</p>
+                  </div>
               </div>
             </div>
           </div>
@@ -564,6 +609,22 @@ function App() {
               </button>
             ))}
 
+          </div>
+        </div>
+      </section>
+
+      {/* --- PARCEIROS (Novo) --- */}
+      <section className="py-12 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-center text-slate-400 font-bold uppercase tracking-widest text-xs mb-8">Empresas Parceiras</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+            {/* [IMAGENS LOGOS PARCEIROS] - Substitua pelos arquivos reais */}
+            <img src="/logos/rml.png" alt="RML" className="h-12 object-contain" />
+            <img src="/logos/enpm.png" alt="ENPM" className="h-10 object-contain" />
+            <img src="/logos/duo.png" alt="Duo" className="h-10 object-contain" />
+            <img src="/logos/sf-formas.png" alt="SF Formas" className="h-12 object-contain" />
+            <img src="/logos/septem.png" alt="Septem" className="h-10 object-contain" />
+            <img src="/logos/soldas-fusion.png" alt="Soldas Fusion" className="h-10 object-contain" />
           </div>
         </div>
       </section>
