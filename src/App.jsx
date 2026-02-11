@@ -702,7 +702,7 @@ function App() {
           <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Dúvidas Frequentes</h2>
           <div className="bg-gray-50 rounded-2xl p-6 md:p-10 border border-gray-100">
             <FaqItem 
-              question="A Haam atende a todos os estados do Brasil?" 
+              question="A HAAM atende a todos os estados do Brasil?" 
               answer="Atendemos em todo o território nacional (Brasil), com sede em Minas Gerais. Realizamos consultorias presenciais e projetos de forma remota com total eficiência." 
             />
             <FaqItem 
