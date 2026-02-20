@@ -120,7 +120,7 @@ const PORTFOLIO_DETAILS = {
       "/portfolio/modulacao-parede-6.jpg",
       "/portfolio/modulacao-parede-7.jpg" 
     ],
-    desc: "Detalhamento da 1° concretagem com indicação de peças novas e peças utilizadas."
+    desc: "Detalhamento das concretagens com indicações de peças novas e utilizadas."
   },
   'escada': {
     title: "Escada 3D",
@@ -159,7 +159,7 @@ const PORTFOLIO_DETAILS = {
   'consultoria': {
     title: "Consultoria",
     images: [
-      "/portfolio/consultoria-2.jpg",
+      "/portfolio/consultoria-2.jpeg",
       "/portfolio/consultoria-1.jpeg",
       "/portfolio/consultoria-tunel.jpg"],
     desc: "Estudo de viabilidade, análise de projetos, assessoria na aquisição da forma e contratações de serviços, acompanhamento e validação da pré-montagem."
@@ -530,8 +530,8 @@ function App() {
                <p className="text-slate-300">Que buscam escala industrial e precisam de projetos que garantam a repetitividade.</p>
              </div>
              <div className="bg-slate-800 p-8 rounded-lg border border-slate-700 hover:border-haam-blue transition">
-               <h3 className="text-xl font-bold mb-4 text-blue-400">Engenheiros de Obra</h3>
-               <p className="text-slate-300">Que sofrem com projetos teóricos que não "conversam" com a realidade do canteiro.</p>
+               <h3 className="text-xl font-bold mb-4 text-blue-400">Engenheiros de Obra e Incorporadoras</h3>
+               <p className="text-slate-300">Que querem migrar para o método de parede de concreto e precisam de orientação quanto aos projetos, execução e contratos.</p>
              </div>
              <div className="bg-slate-800 p-8 rounded-lg border border-slate-700 hover:border-haam-blue transition">
                <h3 className="text-xl font-bold mb-4 text-blue-400">Gestores de Ativos</h3>
@@ -621,8 +621,10 @@ function App() {
             {/* [IMAGENS LOGOS PARCEIROS] - Substitua pelos arquivos reais */}
             <img src="/logos/rml.png" alt="RML" className="h-12 object-contain" />
             <img src="/logos/enpm.png" alt="ENPM" className="h-10 object-contain" />
-            <img src="/logos/duo.png" alt="Duo" className="h-10 object-contain" />
-            <img src="/logos/sf-formas.png" alt="SF Formas" className="h-12 object-contain" />
+            <img src="/logos/jri.png" alt="JRI" className="h-16 object-contain" />
+            <img src="/logos/lensis.png" alt="Lensis" className="h-16 object-contain" />
+            <img src="/logos/bimeng.png" alt="Bimeng" className="h-10 object-contain" />
+            <img src="/logos/sf-formas.png" alt="SF Formas" className="h-14 object-contain" />
             <img src="/logos/septem.png" alt="Septem" className="h-10 object-contain" />
             <img src="/logos/soldas-fusion.png" alt="Soldas Fusion" className="h-10 object-contain" />
           </div>
