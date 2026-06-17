@@ -4,6 +4,24 @@ import {
   Menu, X, ChevronDown, Instagram, Linkedin, Users, BrainCircuit, ShieldCheck, MapPin, Award, Star, Quote
 } from 'lucide-react';
 
+// ==========================================
+// CONFIGURAÇÕES DE UTM E WHATSAPP
+// ==========================================
+const NUMERO_WHATSAPP = "5531998153205";
+const MENSAGEM_PADRAO = "Oi, tenho interesse em saber mais sobre o trabalho da HAAM!";
+const DIAS_EXPIRACAO = 30;
+const PARAMS_UTM = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid'];
+
+// Função para resgatar a UTM salva
+const getUTM = (param) => {
+  const ts = localStorage.getItem(`utm_lv_${param}_ts`);
+  if (!ts) return null;
+  const dias = (Date.now() - parseInt(ts, 10)) / (1000 * 60 * 60 * 24);
+  if (dias > DIAS_EXPIRACAO) return null;
+  return localStorage.getItem(`utm_lv_${param}`);
+};
+// ==========================================
+
 // --- DADOS DO SISTEMA (Baseados no PDF) ---
 
 const TEAM_DETAILS = {
@@ -11,7 +29,7 @@ const TEAM_DETAILS = {
     name: "Tânia Albuquerque",
     role: "Sócia Proprietária",
     crea: "CREA-MG 95614/D",
-    img: "/foto-tania.jpeg", // [SUBSTITUIR FOTO]
+    img: "/foto-tania.jpeg", 
     bio: [
       "Engenheira Civil graduada pela UFMG (Ago/2007)",
       "Pós-Graduada em Estruturas (Jul/2012)",
@@ -24,7 +42,7 @@ const TEAM_DETAILS = {
     name: "Thaís Albuquerque",
     role: "Sócia Proprietária",
     crea: "CREA-MG 229528/D",
-    img: "/foto-thais.jpeg", // [SUBSTITUIR FOTO]
+    img: "/foto-thais.jpeg", 
     bio: [
       "Engenheira Civil graduada pela PUC-MG (Jul/2017)",
       "Pós-Graduada em Gestão de Projetos (Jul/2020)",
@@ -110,7 +128,6 @@ const SERVICES_DETAILS = {
 const PORTFOLIO_DETAILS = {
   'modulacao': {
     title: "Modulação de Parede",
-    // Agora aceita várias imagens
     images: [
       "/portfolio/modulacao-parede.jpg",
       "/portfolio/modulacao-parede-2.jpg",
@@ -154,7 +171,7 @@ const PORTFOLIO_DETAILS = {
       "/portfolio/estrutural-8.jpg",
       "/portfolio/estrutural-9.jpg"
     ], 
-    desc: "Cálculo e detalhamento de estruturas em parede de concreto e alvenaria estrutural."
+    desc: "Cálculo e detalhamento de structures em parede de concreto e alvenaria estrutural."
   },
   'consultoria': {
     title: "Consultoria",
@@ -236,12 +253,49 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
-  const [activeModal, setActiveModal] = useState(null); // 'tania', 'thais', or serviceKey
-  const [modalType, setModalType] = useState(null); // 'bio' or 'service'
+  const [activeModal, setActiveModal] = useState(null); 
+  const [modalType, setModalType] = useState(null); 
 
-  const whatsappLink = "https://wa.me/5531998153205?text=Oi%2C%20tenho%20interesse%20em%20saber%20mais%20sobre%20o%20trabalho%20da%20HAAM!"; 
+  // ==========================================
+  // LÓGICA DE CAPTURA DE UTM E CLIQUE WHATSAPP
+  // ==========================================
+  useEffect(() => {
+    // Salva as UTMs da URL no LocalStorage quando a página carrega
+    const params = new URLSearchParams(window.location.search);
+    PARAMS_UTM.forEach((param) => {
+      const valor = params.get(param);
+      if (valor) {
+        localStorage.setItem(`utm_lv_${param}`, valor);
+        localStorage.setItem(`utm_lv_${param}_ts`, Date.now().toString());
+      }
+    });
+  }, []);
 
-  // Controle do Sticky CTA
+  const handleWhatsAppClick = (e) => {
+    e.preventDefault();
+
+    // Monta a mensagem baseada na UTM term
+    const palavraChave = getUTM('utm_term');
+    const mensagemFinal = palavraChave
+      ? `Oi, tenho interesse em saber mais sobre ${palavraChave}!`
+      : MENSAGEM_PADRAO;
+
+    const linkFinal = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagemFinal)}`;
+
+    // Dispara evento para o GTM
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'event': 'whatsapp_click',
+      'whatsapp_utm_source': getUTM('utm_source') || 'direto',
+      'whatsapp_utm_campaign': getUTM('utm_campaign') || 'nao_informado',
+      'whatsapp_utm_term': getUTM('utm_term') || 'nao_informado'
+    });
+
+    // Abre o WhatsApp
+    window.open(linkFinal, '_blank', 'noopener,noreferrer');
+  };
+  // ==========================================
+
   useEffect(() => {
     const handleScroll = () => {
       setShowStickyCTA(window.scrollY > 600);
@@ -270,16 +324,15 @@ function App() {
       
       {/* --- STICKY CTA MOBILE --- */}
       <div className={`fixed bottom-0 left-0 w-full z-40 bg-white p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.1)] md:hidden transition-transform duration-300 ${showStickyCTA ? 'translate-y-0' : 'translate-y-full'}`}>
-        <a href={whatsappLink} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-full shadow-lg pulse-animation">
+        <button onClick={handleWhatsAppClick} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-full shadow-lg pulse-animation">
           <Phone size={20} />
           Solicitar Proposta
-        </a>
+        </button>
       </div>
 
       {/* --- HEADER --- */}
       <header className="bg-white shadow-md fixed w-full z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-          {/* Logo (Substituir SRC) */}
           <div 
             className="flex items-center gap-2 cursor-pointer" 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -287,7 +340,6 @@ function App() {
             <img src="/logo-haam-colorida.png" alt="Logo HAAM Engenharia" className="h-12 w-auto" /> 
           </div>
 
-          {/* Menu Desktop */}
           <nav className="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
             <a href="#sobre" className="hover:text-haam-blue transition">Sobre Nós</a>
             <a href="#servicos" className="hover:text-haam-blue transition">Serviços</a>
@@ -295,25 +347,22 @@ function App() {
             <a href="#faq" className="hover:text-haam-blue transition">Dúvidas</a>
           </nav>
 
-          {/* CTA Header */}
-          <a href={whatsappLink} className="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-full font-bold text-sm transition items-center gap-2 shadow-lg">
+          <button onClick={handleWhatsAppClick} className="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-full font-bold text-sm transition items-center gap-2 shadow-lg">
             <Phone size={16} />
             Agendar Reunião Técnica
-          </a>
+          </button>
 
-          {/* Mobile Menu Button */}
           <button className="md:hidden text-slate-800" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown */}
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t p-4 flex flex-col gap-4 shadow-xl absolute w-full">
             <a href="#sobre" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Sobre Nós</a>
             <a href="#servicos" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Serviços</a>
             <a href="#projetos" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Projetos</a>
-            <a href={whatsappLink} className="bg-green-600 text-white p-3 rounded text-center font-bold">Agendar no WhatsApp</a>
+            <button onClick={handleWhatsAppClick} className="bg-green-600 text-white p-3 rounded text-center font-bold">Agendar no WhatsApp</button>
           </div>
         )}
       </header>
@@ -333,21 +382,16 @@ function App() {
               Soluções focadas em parede de concreto com replicabilidade, viabilidade e eficiência para construtoras e incorporadoras.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <a href={whatsappLink} className="bg-haam-red hover:bg-red-700 text-white px-8 py-4 rounded-md font-bold text-lg transition flex justify-center items-center gap-2 shadow-red-900/50 shadow-lg">
+              <button onClick={handleWhatsAppClick} className="bg-haam-red hover:bg-red-700 text-white px-8 py-4 rounded-md font-bold text-lg transition flex justify-center items-center gap-2 shadow-red-900/50 shadow-lg">
                 Agendar Reunião Técnica <ArrowRight size={20} />
-              </a>
+              </button>
             </div>
           </div>
           
-          {/* Aumentei a margem inferior no mobile (mb-24) para o badge não atropelar a próxima seção */}
           <div className="relative p-2 rounded-xl animate-slide-in-right mb-24 md:mb-12">
-             
-             {/* CONTAINER DA IMAGEM */}
              <div className="relative rounded-lg overflow-hidden border border-slate-700 shadow-2xl z-10">
                 <div className="bg-slate-800 aspect-video relative">
                    <img src="/foto-capa2.jpeg" alt="Projeto 3D Parede de Concreto" className="w-full h-full object-cover opacity-90" />
-                   
-                   {/* LEGENDA INTERNA */}
                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-10 pb-4 px-4 flex justify-end items-end">
                       <p className="text-[10px] md:text-xs text-slate-200 text-right font-medium leading-tight max-w-[65%]">
                         Edifício London Plaza | Pride Engenharia<br/>
@@ -357,8 +401,6 @@ function App() {
                 </div>
              </div>
 
-             {/* BADGE (PENDURADO PARA FORA) */}
-             {/* Mobile: -bottom-16 (Desce bem mais) | Desktop: -bottom-8 (Mantém o que estava bom) */}
              <div className="absolute -bottom-16 md:-bottom-8 left-4 md:-left-6 bg-white text-slate-900 p-4 rounded-lg shadow-2xl border-l-4 border-haam-blue z-20 max-w-[200px]">
                <p className="text-xs md:text-sm font-bold flex items-center gap-2 mb-1">
                  <Award size={16} className="text-yellow-500 shrink-0"/> Certificação BNO
@@ -390,20 +432,16 @@ function App() {
           </div>
         </div>
       </section>
-{/* --- CLIENTES (Carrossel Infinito) --- */}
+
+      {/* --- CLIENTES --- */}
       <section className="py-12 bg-slate-50 border-b border-slate-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 mb-10">
           <p className="text-center text-slate-400 font-bold uppercase tracking-widest text-xs">
             Quem constrói com a HAAM
           </p>
         </div>
-
-        {/* Container do Carrossel */}
         <div className="relative w-full overflow-hidden mask-linear-fade">
-          {/* Wrapper que move */}
           <div className="flex w-max animate-infinite-scroll hover:[animation-play-state:paused]">
-            
-            {/* --- LISTA DE LOGOS (ORIGINAL) --- */}
             <div className="flex items-center gap-12 md:gap-24 px-6 md:px-12">
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
@@ -411,17 +449,10 @@ function App() {
                 "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo23"
               ].map((cliente, index) => (
                 <div key={index} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
-                  {/* Substitua os SRCS pelos arquivos reais ex: /clientes/tenda.png */}
-                  <img 
-                    src={`/clientes/${cliente.toLowerCase()}.png`} 
-                    alt={`Logo ${cliente}`} 
-                    className="max-h-full max-w-full object-contain"
-                  />
+                  <img src={`/clientes/${cliente.toLowerCase()}.png`} alt={`Logo ${cliente}`} className="max-h-full max-w-full object-contain" />
                 </div>
               ))}
             </div>
-
-            {/* --- LISTA DE LOGOS (DUPLICADA PARA O LOOP) --- */}
             <div className="flex items-center gap-12 md:gap-24 px-6 md:px-12">
               {[
                 "cobra", "Direcional", "prati", "Emccamp", "HM", 
@@ -429,25 +460,18 @@ function App() {
                 "Village", "Essence", "MC3", "CAC","rottas","lmarquezzo23"
               ].map((cliente, index) => (
                 <div key={`dup-${index}`} className="flex items-center justify-center h-12 w-32 md:w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
-                  <img 
-                    src={`/clientes/${cliente.toLowerCase()}.png`} 
-                    alt={`Logo ${cliente}`} 
-                    className="max-h-full max-w-full object-contain"
-                  />
+                  <img src={`/clientes/${cliente.toLowerCase()}.png`} alt={`Logo ${cliente}`} className="max-h-full max-w-full object-contain" />
                 </div>
               ))}
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* --- SOBRE NÓS (Fundo Branco com Título Premium) --- */}
+      {/* --- SOBRE NÓS --- */}
       <section id="sobre" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-16 items-center">
-            
-            {/* Coluna da Imagem */}
             <div className="relative">
               <div className="bg-slate-200 aspect-[4/5] rounded-lg shadow-2xl relative overflow-hidden group">
                 <img src="/foto-socias2.png" alt="Tânia e Thais Albuquerque" className="w-full h-full object-cover" />
@@ -458,19 +482,14 @@ function App() {
                 </div>
               </div>
             </div>
-            
-            {/* Coluna do Texto */}
             <div>
               <span className="text-haam-red font-bold uppercase tracking-wider text-sm">Nossa História</span>
-              
-              {/* TÍTULO COM DEGRADÊ AZUL (Estilo Premium) */}
               <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mt-2 mb-6 leading-tight">
                 União de expertises: <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-haam-blue via-blue-600 to-cyan-500">
                   Escritório + Obra
                 </span>
               </h2>
-
               <p className="text-slate-600 mb-6 leading-relaxed">
                 A HAAM nasceu em Setembro de 2023 para suprir a carência do mercado em modulação de formas assertiva. Fundada por <strong>Tânia Albuquerque</strong> e reforçada por <strong>Thais Albuquerque</strong>, integrando o conhecimento estrutural profundo com a visão prática de execução e canteiro.
               </p>
@@ -507,7 +526,6 @@ function App() {
                   </div>
               </div>
 
-              {/* Destaque Certificação */}
               <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg flex items-start gap-3">
                   <Award className="text-yellow-600 shrink-0 mt-1" />
                   <div>
@@ -541,7 +559,7 @@ function App() {
         </div>
       </section>
 
-      {/* --- SERVIÇOS (Cards Clicáveis) --- */}
+      {/* --- SERVIÇOS --- */}
       <section id="servicos" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-10 text-center md:text-left">
@@ -573,15 +591,13 @@ function App() {
         </div>
       </section>
 
-      {/* --- PROJETOS (Clicáveis com Zoom) --- */}
+      {/* --- PROJETOS --- */}
       <section id="projetos" className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-slate-900 mb-2 text-center">Cases e Portfólio</h2>
           <p className="text-center text-slate-500 mb-10 text-sm">Clique nos projetos para ampliar a imagem</p>
           
-          {/* Scroll horizontal no mobile */}
           <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-8 pb-6 snap-x snap-mandatory p-2">
-            
             {Object.entries(PORTFOLIO_DETAILS).map(([key, item]) => (
               <button 
                 key={key}
@@ -592,12 +608,7 @@ function App() {
                 className="min-w-[300px] bg-white rounded-lg shadow-md overflow-hidden snap-center border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-left group"
               >
                  <div className="h-56 bg-slate-200 overflow-hidden relative">
-                   <img 
-                        src={item.images[0]} 
-                        alt={item.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
-                      />
-                   {/* Ícone de Zoom no Hover */}
+                   <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <span className="bg-white/90 text-slate-900 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">Ver Ampliado</span>
                    </div>
@@ -608,17 +619,15 @@ function App() {
                  </div>
               </button>
             ))}
-
           </div>
         </div>
       </section>
 
-      {/* --- PARCEIROS (Novo) --- */}
+      {/* --- PARCEIROS --- */}
       <section className="py-12 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4">
           <p className="text-center text-slate-400 font-bold uppercase tracking-widest text-xs mb-8">Empresas Parceiras</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-            {/* [IMAGENS LOGOS PARCEIROS] - Substitua pelos arquivos reais */}
             <img src="/logos/rml.png" alt="RML" className="h-12 object-contain" />
             <img src="/logos/enpm.png" alt="ENPM" className="h-10 object-contain" />
             <img src="/logos/jri.png" alt="JRI" className="h-16 object-contain" />
@@ -631,11 +640,9 @@ function App() {
         </div>
       </section>
 
-      {/* --- DEPOIMENTOS (Rolagem Lateral no Mobile) --- */}
+      {/* --- DEPOIMENTOS --- */}
       <section className="py-20 bg-haam-blue text-white overflow-hidden">
         <div className="max-w-6xl mx-auto px-4">
-          
-          {/* Destaque Principal - Thais */}
           <div className="max-w-4xl mx-auto text-center mb-10 md:mb-16">
             <Quote size={48} className="text-blue-300 mx-auto mb-6 opacity-50" />
             <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-relaxed">
@@ -652,16 +659,11 @@ function App() {
             </div>
           </div>
 
-          {/* Dica de Scroll (Apenas Mobile) */}
           <div className="md:hidden text-center text-blue-300 text-xs mb-4 animate-pulse">
             &larr; Deslize para ver mais depoimentos &rarr;
           </div>
 
-          {/* Grid/Carrossel de Prints */}
-          {/* Mobile: Flex + Scroll | Desktop: Grid */}
           <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 items-start pb-8 md:pb-0 snap-x snap-mandatory -mx-4 px-4 md:mx-0 md:px-0 scroll-smooth">
-            
-            {/* Depoimento 1 */}
             <div className="min-w-[85vw] md:min-w-0 snap-center bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
               <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
                 <img src="/depoimentos/depoimento-1.jpeg" alt="Feedback Equipe Encantada" className="w-full h-auto" />
@@ -672,7 +674,6 @@ function App() {
               </div>
             </div>
 
-            {/* Depoimento 2 */}
             <div className="min-w-[85vw] md:min-w-0 snap-center bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
               <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
                 <img src="/depoimentos/depoimento-2.jpeg" alt="Feedback Inovações" className="w-full h-auto" />
@@ -683,7 +684,6 @@ function App() {
               </div>
             </div>
 
-            {/* Depoimento 3 */}
             <div className="min-w-[85vw] md:min-w-0 snap-center bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition duration-300">
               <div className="rounded-xl overflow-hidden mb-4 border border-white/5">
                 <img src="/depoimentos/depoimento-3.jpeg" alt="Feedback Projeto Excelente" className="w-full h-auto" />
@@ -693,7 +693,6 @@ function App() {
                 <p className="text-blue-200 text-sm">Coordenadora de projetos da EMCCAMP</p>
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -723,7 +722,7 @@ function App() {
         </div>
       </section>
 
-      {/* --- FOOTER (Claro) --- */}
+      {/* --- FOOTER --- */}
       <footer className="bg-slate-100 text-slate-700 py-16 text-sm border-t border-slate-200">
         <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
@@ -734,8 +733,8 @@ function App() {
                Especialistas em projetos estruturais e modulação de formas. Transformando a construção civil com técnica, viabilidade e eficiência.
              </p>
              <div className="flex gap-4">
-               <a href="https://www.instagram.com/haam_engenharia/" target="_blank" className="bg-white border border-slate-200 p-2 rounded-full hover:bg-haam-red hover:text-white hover:border-haam-red transition"><Instagram size={20}/></a>
-               <a href="https://www.linkedin.com/company/haamengenharia/" target="_blank" className="bg-white border border-slate-200 p-2 rounded-full hover:bg-haam-blue hover:text-white hover:border-haam-blue transition"><Linkedin size={20}/></a>
+               <a href="https://www.instagram.com/haam_engenharia/" target="_blank" rel="noreferrer" className="bg-white border border-slate-200 p-2 rounded-full hover:bg-haam-red hover:text-white hover:border-haam-red transition"><Instagram size={20}/></a>
+               <a href="https://www.linkedin.com/company/haamengenharia/" target="_blank" rel="noreferrer" className="bg-white border border-slate-200 p-2 rounded-full hover:bg-haam-blue hover:text-white hover:border-haam-blue transition"><Linkedin size={20}/></a>
              </div>
           </div>
           
@@ -764,18 +763,16 @@ function App() {
         </div>
       </footer>
 
-      {/* --- MODAL (POPUP ATUALIZADO) --- */}
+      {/* --- MODAL --- */}
       <Modal 
         isOpen={!!activeModal} 
         onClose={closeModal}
-        // Se for portfólio, o título fica menor ou oculto se preferir, aqui mantivemos padrão
         title={
           modalType === 'bio' ? TEAM_DETAILS[activeModal]?.name : 
           modalType === 'service' ? SERVICES_DETAILS[activeModal]?.title :
           modalType === 'portfolio' ? PORTFOLIO_DETAILS[activeModal]?.title : ''
         }
       >
-        {/* CONTEÚDO BIO (EQUIPE) */}
         {modalType === 'bio' && TEAM_DETAILS[activeModal] && (
           <div className="space-y-4">
             <p className="text-lg font-semibold text-slate-700">{TEAM_DETAILS[activeModal].role}</p>
@@ -791,7 +788,6 @@ function App() {
           </div>
         )}
 
-        {/* CONTEÚDO SERVIÇOS */}
         {modalType === 'service' && SERVICES_DETAILS[activeModal] && (
           <div className="space-y-4">
              <ul className="space-y-3">
@@ -803,23 +799,19 @@ function App() {
               ))}
             </ul>
             <div className="mt-6 pt-4 border-t border-slate-100">
-              <a href={whatsappLink} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition">
+              <button onClick={handleWhatsAppClick} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition">
                 <Phone size={18} />
                 Solicitar Orçamento Desse Serviço
-              </a>
+              </button>
             </div>
           </div>
         )}
 
-        {/* CONTEÚDO PORTFOLIO (GALERIA DE IMAGENS) */}
         {modalType === 'portfolio' && PORTFOLIO_DETAILS[activeModal] && (
           <div className="flex flex-col gap-6">
-             {/* Descrição no topo */}
              <p className="text-slate-600 text-sm italic border-l-4 border-haam-blue pl-4">
                 {PORTFOLIO_DETAILS[activeModal].desc}
              </p>
-
-             {/* Loop para mostrar todas as imagens */}
              <div className="space-y-6">
                {PORTFOLIO_DETAILS[activeModal].images.map((imgSrc, index) => (
                  <div key={index} className="rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
