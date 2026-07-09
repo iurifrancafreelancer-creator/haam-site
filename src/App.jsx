@@ -339,21 +339,22 @@ function App() {
 
       try {
         // 3. Envia os dados por e-mail com as UTMs inclusas
-        await fetch("https://formsubmit.co/ajax/haamgeral2023@gmail.com", {
+        // Substituímos o FormSubmit pelo Web3Forms
+        await fetch("https://api.web3forms.com/submit", {
           method: "POST",
           headers: { 
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            _subject: `Novo Lead HAAM: ${formData.company}`, 
+            access_key: "51feedc4-ee43-4c53-a260-c23dade3bbaa", // Cole a chave que chegou no e-mail
+            subject: `Novo Lead HAAM: ${formData.company}`, 
             Nome: formData.name,
             Empresa: formData.company,
             Telefone: formData.phone,
             Email: formData.email || 'Não informado',
             Projeto: formData.project,
-            ...utmsCapturadas, // As UTMs vão aparecer no final da tabela do e-mail
-            _template: 'table' 
+            ...utmsCapturadas 
           })
         });
 
