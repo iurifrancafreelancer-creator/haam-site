@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Ruler, HardHat, FileCheck, Phone, ArrowRight, Building2, CheckCircle2, 
+  Ruler, HardHat, Phone, ArrowRight, Building2, CheckCircle2, 
   Menu, X, ChevronDown, Instagram, Linkedin, Users, BrainCircuit, Award, Star, Quote
 } from 'lucide-react';
 
 // ==========================================
-// CONFIGURAÇÕES DE UTM
+// CONFIGURAÇÕES DE UTM (Mantidas caso você use no Google Analytics)
 // ==========================================
 const DIAS_EXPIRACAO = 30;
 const PARAMS_UTM = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid'];
@@ -254,11 +254,6 @@ function App() {
   const [activeModal, setActiveModal] = useState(null); 
   const [modalType, setModalType] = useState(null); 
 
-  // --- ESTADOS DO FORMULÁRIO ---
-  const [formData, setFormData] = useState({ name: '', company: '', phone: '', email: '', project: '' });
-  const [touched, setTouched] = useState({ name: false, company: false, phone: false, email: false, project: false });
-  const [formStatus, setFormStatus] = useState('idle'); // 'idle' | 'animating' | 'success'
-
   // ==========================================
   // CAPTURA DE UTM NA ENTRADA
   // ==========================================
@@ -273,120 +268,26 @@ function App() {
     });
   }, []);
 
-  // --- VALIDAÇÃO ---
-  const validateForm = () => {
-    const errors = {};
-    if (!formData.name.trim()) errors.name = "Por favor, informe seu nome.";
-    if (!formData.company.trim()) errors.company = "Informe o nome da empresa.";
-    
-    const phoneDigits = formData.phone.replace(/\D/g, "");
-    if (phoneDigits.length < 10) errors.phone = "Digite o DDD e o número correto.";
-    
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = "E-mail inválido (esqueceu o @?).";
-    }
-    
-    if (!formData.project) errors.project = "Selecione um projeto de interesse.";
-    
-    return errors;
-  };
-
-  const errors = validateForm();
-  const isFormValid = Object.keys(errors).length === 0;
-
-  const handleInputChange = (field, value) => {
-    if (field === 'phone') {
-      let v = value.replace(/\D/g, "");
-      if (v.length > 11) v = v.slice(0, 11);
-      if (v.length > 2) v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-      if (v.length > 9) v = v.replace(/(\d{5})(\d)/, "$1-$2");
-      setFormData(prev => ({ ...prev, phone: v }));
-    } else {
-      setFormData(prev => ({ ...prev, [field]: value }));
-    }
-  };
-
-  const handleBlur = (field) => {
-    setTouched(prev => ({ ...prev, [field]: true }));
-  };
-
   // ==========================================
-  // AÇÃO DE ENVIAR FORMULÁRIO (E UTM PARA GTM)
+  // AÇÃO DE ABRIR WHATSAPP
   // ==========================================
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setTouched({ name: true, company: true, phone: true, email: true, project: true });
-    
-    if (isFormValid) {
-      setFormStatus('animating');
-      
-      // 1. Prepara as UTMs capturadas para envio
-      const utmsCapturadas = {};
-      PARAMS_UTM.forEach(param => {
-        const valor = getUTM(param);
-        if (valor) utmsCapturadas[param.toUpperCase()] = valor; // Maiúsculo para ficar bonito no E-mail
-      });
-
-      // 2. Dispara evento para o GTM (Tráfego Pago)
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        'event': 'lead_form_submit', 
-        'utm_source': getUTM('utm_source') || 'direto',
-        'utm_medium': getUTM('utm_medium') || 'nao_informado',
-        'utm_campaign': getUTM('utm_campaign') || 'nao_informado',
-        'utm_term': getUTM('utm_term') || 'nao_informado'
-      });
-
-      try {
-        // 3. Envia os dados por e-mail com as UTMs inclusas
-        // Substituímos o FormSubmit pelo Web3Forms
-        await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            access_key: "51feedc4-ee43-4c53-a260-c23dade3bbaa", // Cole a chave que chegou no e-mail
-            subject: `Novo Lead HAAM: ${formData.company}`, 
-            Nome: formData.name,
-            Empresa: formData.company,
-            Telefone: formData.phone,
-            Email: formData.email || 'Não informado',
-            Projeto: formData.project,
-            ...utmsCapturadas 
-          })
-        });
-
-        setTimeout(() => {
-          setFormStatus('success');
-        }, 3000);
-
-      } catch (error) {
-        console.error("Erro ao enviar:", error);
-        alert("Ocorreu um erro ao enviar a solicitação. Por favor, tente novamente mais tarde.");
-        setFormStatus('idle');
-      }
-    }
-  };
-
-  // Função para fazer scroll até o formulário ao invés de abrir o WhatsApp
-  const scrollToContato = (e) => {
-    if(e) e.preventDefault();
+  const openWhatsApp = (e) => {
+    if (e) e.preventDefault();
     setIsMenuOpen(false); // Fecha o menu mobile se estiver aberto
     if (activeModal) closeModal(); // Fecha o modal se estiver aberto
     
-    const contatoSection = document.getElementById('contato');
-    if (contatoSection) {
-      contatoSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+    const numero = "5531998153205";
+    const mensagem = encodeURIComponent("Oi, vim do site, gostaria de mais informações");
+    const url = `https://wa.me/${numero}?text=${mensagem}`;
+    
+    // Dispara evento para o GTM (opcional, para continuar rastreando conversões)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'event': 'whatsapp_click', 
+      'utm_source': getUTM('utm_source') || 'direto'
+    });
 
-  const getInputClass = (field) => {
-    const base = "w-full px-4 py-3 rounded-lg border-2 outline-none transition bg-slate-50 focus:bg-white ";
-    if (!touched[field]) return base + "border-slate-300 focus:border-haam-blue";
-    if (errors[field]) return base + "border-red-500 focus:border-red-600 bg-red-50";
-    return base + "border-green-500 focus:border-green-600 bg-green-50";
+    window.open(url, '_blank');
   };
 
   useEffect(() => {
@@ -417,7 +318,7 @@ function App() {
       
       {/* --- STICKY CTA MOBILE --- */}
       <div className={`fixed bottom-0 left-0 w-full z-40 bg-white p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.1)] md:hidden transition-transform duration-300 ${showStickyCTA ? 'translate-y-0' : 'translate-y-full'}`}>
-        <button onClick={scrollToContato} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-full shadow-lg pulse-animation">
+        <button onClick={openWhatsApp} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-full shadow-lg pulse-animation">
           <Phone size={20} />
           Solicitar Proposta
         </button>
@@ -440,7 +341,7 @@ function App() {
             <a href="#faq" className="hover:text-haam-blue transition">Dúvidas</a>
           </nav>
 
-          <button onClick={scrollToContato} className="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-full font-bold text-sm transition items-center gap-2 shadow-lg">
+          <button onClick={openWhatsApp} className="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-full font-bold text-sm transition items-center gap-2 shadow-lg">
             <Phone size={16} />
             Agendar Reunião Técnica
           </button>
@@ -455,7 +356,7 @@ function App() {
             <a href="#sobre" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Sobre Nós</a>
             <a href="#servicos" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Serviços</a>
             <a href="#projetos" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Projetos</a>
-            <button onClick={scrollToContato} className="bg-green-600 text-white p-3 rounded text-center font-bold">Solicitar Contato</button>
+            <button onClick={openWhatsApp} className="bg-green-600 text-white p-3 rounded text-center font-bold">Solicitar Contato</button>
           </div>
         )}
       </header>
@@ -475,7 +376,7 @@ function App() {
               Soluções focadas em parede de concreto com replicabilidade, viabilidade e eficiência para construtoras e incorporadoras.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button onClick={scrollToContato} className="bg-haam-red hover:bg-red-700 text-white px-8 py-4 rounded-md font-bold text-lg transition flex justify-center items-center gap-2 shadow-red-900/50 shadow-lg">
+              <button onClick={openWhatsApp} className="bg-haam-red hover:bg-red-700 text-white px-8 py-4 rounded-md font-bold text-lg transition flex justify-center items-center gap-2 shadow-red-900/50 shadow-lg">
                 Agendar Reunião Técnica <ArrowRight size={20} />
               </button>
             </div>
@@ -790,162 +691,6 @@ function App() {
         </div>
       </section>
 
-      {/* --- FORMULÁRIO DE CONTATO (Com Validação, Animação e UTMs) --- */}
-      <section id="contato" className="py-20 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Em que podemos te ajudar?</h2>
-            <p className="text-slate-600">Preencha os dados abaixo e nossa equipe entrará em contato para entender sua necessidade.</p>
-          </div>
-          
-          <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 relative overflow-hidden min-h-[400px]">
-            
-            {/* ESTADO 1: FORMULÁRIO */}
-            <form 
-              className={`space-y-6 transition-all duration-500 ${formStatus !== 'idle' ? 'opacity-0 pointer-events-none absolute w-full' : 'opacity-100 relative'}`} 
-              onSubmit={handleSubmit}
-            >
-              <div className="grid md:grid-cols-2 gap-6 pt-2">
-                <div className="relative">
-                  <label className="block text-sm font-bold text-slate-700 mb-2">NOME *</label>
-                  <input 
-                    type="text" 
-                    value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    onBlur={() => handleBlur('name')}
-                    className={getInputClass('name')} 
-                    placeholder="Seu nome completo" 
-                  />
-                  {touched.name && errors.name && (
-                    <div className="absolute -top-8 left-0 bg-red-500 text-white text-xs py-1 px-3 rounded-md shadow-md animate-fade-in z-10 before:content-[''] before:absolute before:-bottom-1 before:left-4 before:w-2 before:h-2 before:bg-red-500 before:rotate-45">
-                      {errors.name}
-                    </div>
-                  )}
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm font-bold text-slate-700 mb-2">EMPRESA *</label>
-                  <input 
-                    type="text" 
-                    value={formData.company}
-                    onChange={(e) => handleInputChange('company', e.target.value)}
-                    onBlur={() => handleBlur('company')}
-                    className={getInputClass('company')} 
-                    placeholder="Nome da construtora" 
-                  />
-                  {touched.company && errors.company && (
-                    <div className="absolute -top-8 left-0 bg-red-500 text-white text-xs py-1 px-3 rounded-md shadow-md animate-fade-in z-10 before:content-[''] before:absolute before:-bottom-1 before:left-4 before:w-2 before:h-2 before:bg-red-500 before:rotate-45">
-                      {errors.company}
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-6 pt-2">
-                <div className="relative">
-                  <label className="block text-sm font-bold text-slate-700 mb-2">TELEFONE *</label>
-                  <input 
-                    type="tel" 
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    onBlur={() => handleBlur('phone')}
-                    placeholder="(00) 00000-0000"
-                    className={getInputClass('phone')} 
-                  />
-                  {touched.phone && errors.phone && (
-                    <div className="absolute -top-8 left-0 bg-red-500 text-white text-xs py-1 px-3 rounded-md shadow-md animate-fade-in z-10 before:content-[''] before:absolute before:-bottom-1 before:left-4 before:w-2 before:h-2 before:bg-red-500 before:rotate-45">
-                      {errors.phone}
-                    </div>
-                  )}
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm font-bold text-slate-700 mb-2">E-MAIL (Opcional)</label>
-                  <input 
-                    type="email" 
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    onBlur={() => handleBlur('email')}
-                    placeholder="seu@email.com.br"
-                    className={getInputClass('email')} 
-                  />
-                  {touched.email && errors.email && (
-                    <div className="absolute -top-8 left-0 bg-red-500 text-white text-xs py-1 px-3 rounded-md shadow-md animate-fade-in z-10 before:content-[''] before:absolute before:-bottom-1 before:left-4 before:w-2 before:h-2 before:bg-red-500 before:rotate-45">
-                      {errors.email}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="relative pt-2">
-                <label className="block text-sm font-bold text-slate-700 mb-2">Em qual projeto tem interesse? *</label>
-                <select 
-                  value={formData.project}
-                  onChange={(e) => handleInputChange('project', e.target.value)}
-                  onBlur={() => handleBlur('project')}
-                  className={getInputClass('project') + " cursor-pointer"}
-                >
-                  <option value="" disabled>Selecione uma opção...</option>
-                  <option value="Projetos estruturais parede de concreto">Projetos estruturais parede de concreto</option>
-                  <option value="Projetos estruturais alvenaria">Projetos estruturais alvenaria</option>
-                  <option value="Projetos hidráulicos">Projetos hidráulicos</option>
-                  <option value="Projetos de modulação de formas">Projetos de modulação de formas</option>
-                  <option value="Projetos sistema de segurança">Projetos sistema de segurança</option>
-                  <option value="Projetos de linha de vida">Projetos de linha de vida</option>
-                  <option value="Consultoria">Consultoria</option>
-                  <option value="Todos os projetos">Todos os projetos</option>
-                </select>
-                {touched.project && errors.project && (
-                  <div className="absolute -top-6 left-0 bg-red-500 text-white text-xs py-1 px-3 rounded-md shadow-md animate-fade-in z-10 before:content-[''] before:absolute before:-bottom-1 before:left-4 before:w-2 before:h-2 before:bg-red-500 before:rotate-45">
-                    {errors.project}
-                  </div>
-                )}
-              </div>
-
-              <button 
-                type="submit" 
-                className="w-full bg-haam-blue hover:bg-blue-800 text-white font-bold py-4 rounded-lg transition duration-300 shadow-md flex justify-center items-center gap-2 mt-4"
-              >
-                Solicitar contato <ArrowRight size={20} />
-              </button>
-            </form>
-
-            {/* ESTADO 2: ANIMAÇÃO */}
-            {formStatus === 'animating' && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-20">
-                <h3 className="text-xl font-bold text-slate-600 mb-8">Construindo sua solicitação...</h3>
-                <div className="relative w-32 h-32 flex flex-col justify-end gap-1 border-b-4 border-slate-800">
-                  <div className="h-6 w-full bg-slate-300 rounded-sm border border-slate-400 animate-slide-up" style={{animationDelay: '1.5s', animationFillMode: 'both'}}></div>
-                  <div className="h-6 w-full bg-slate-400 rounded-sm border border-slate-500 animate-slide-up" style={{animationDelay: '1.0s', animationFillMode: 'both'}}></div>
-                  <div className="h-6 w-full bg-slate-500 rounded-sm border border-slate-600 animate-slide-up" style={{animationDelay: '0.5s', animationFillMode: 'both'}}></div>
-                  <div className="h-6 w-full bg-slate-600 rounded-sm border border-slate-700 animate-slide-up" style={{animationDelay: '0s', animationFillMode: 'both'}}></div>
-                </div>
-              </div>
-            )}
-
-            {/* ESTADO 3: SUCESSO */}
-            {formStatus === 'success' && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-20 animate-fade-in px-6 text-center">
-                <div className="bg-green-100 p-4 rounded-full text-green-600 mb-6">
-                  <CheckCircle2 size={64} />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Solicitação Recebida!</h3>
-                <p className="text-slate-600 mb-8 max-w-sm">
-                  Muito obrigado pelo interesse, <strong>{formData.name}</strong>. Nossa equipe técnica analisará as informações da <strong>{formData.company}</strong> e entrará em contato em breve.
-                </p>
-                <button 
-                  onClick={() => { setFormStatus('idle'); setFormData({ name: '', company: '', phone: '', email: '', project: '' }); setTouched({}); }}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-6 rounded-lg transition"
-                >
-                  Enviar nova solicitação
-                </button>
-              </div>
-            )}
-
-          </div>
-        </div>
-      </section>
-
       {/* --- FAQ --- */}
       <section id="faq" className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4">
@@ -1048,7 +793,7 @@ function App() {
               ))}
             </ul>
             <div className="mt-6 pt-4 border-t border-slate-100">
-              <button onClick={scrollToContato} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition">
+              <button onClick={openWhatsApp} className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition">
                 <Phone size={18} />
                 Solicitar Orçamento Desse Serviço
               </button>
